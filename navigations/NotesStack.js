@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Notes from "../screens/NoteScreens/Notes";
 import NoteDetail from "../screens/NoteScreens/NoteDetail";
 import AddNote from "../screens/NoteScreens/AddNote";
+import colors from "../constants/colors";
 
 const Stack = createStackNavigator();
 
@@ -10,8 +11,8 @@ const NotesStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTintColor: "white",
-        headerStyle: { backgroundColor: "#21212b" },
+        headerTintColor: colors.primary,
+        headerStyle: { backgroundColor: colors.secondary },
       }}
     >
       <Stack.Screen

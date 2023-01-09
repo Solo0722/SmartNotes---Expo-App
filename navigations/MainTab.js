@@ -5,6 +5,7 @@ import NotesStack from "./NotesStack";
 import SettingsStack from "./SettingsStack";
 import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import colors from "../constants/colors";
 
 const MainTab = ({ navigation }) => {
   const Tab = createMaterialBottomTabNavigator();
@@ -13,11 +14,10 @@ const MainTab = ({ navigation }) => {
     <NavigationContainer>
       <Tab.Navigator
         barStyle={{
-          backgroundColor: "#21212b",
-          borderWidth: 1,
-          borderColor: "rgba(255,255,255,0.1)",
+          backgroundColor: colors.white,
+          elevation: 5,
         }}
-        activeColor="orangered"
+        activeColor={colors.secondary}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size = 23 }) => {
             let iconName;
@@ -33,7 +33,6 @@ const MainTab = ({ navigation }) => {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarLabel: false,
         })}
       >
         <Tab.Screen name="Home" component={NotesStack} />

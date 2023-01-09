@@ -1,5 +1,6 @@
 import {
   Alert,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -8,12 +9,13 @@ import {
   ToastAndroid,
   View,
 } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { globalStyles } from "../../styles/global";
 import moment from "moment-timezone";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GlobalContext } from "../../context/context";
-import { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+import colors from "../../constants/colors";
 
 const NoteDetail = ({ route, navigation }) => {
   const { note } = route.params;
@@ -41,10 +43,24 @@ const NoteDetail = ({ route, navigation }) => {
   const [notesData, setNotesData] = useState({
     title: note.title,
     body: note.body,
-    images: note.images,
+    image: note.image,
     reminder: note.reminder,
     map: note.map,
   });
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setNotesData({ ...notesData, image: result });
+    }
+  };
 
   const updateNote = (note) => {
     if (!notesData.title || notesData.title.length < 2) {
@@ -57,11 +73,11 @@ const NoteDetail = ({ route, navigation }) => {
       let objIndex = allNotes.findIndex((nt) => nt.id == note.id);
       allNotes[objIndex].title = notesData.title;
       allNotes[objIndex].body = notesData.body;
-      allNotes[objIndex].images = notesData.images;
+      allNotes[objIndex].image = notesData.image;
       allNotes[objIndex].reminder = notesData.reminder;
       allNotes[objIndex].map = notesData.map;
       allNotes[objIndex].createdAt = new Date();
-      console.log(allNotes);
+      // console.log(allNotes);
       setAllNotes(allNotes);
       navigation.goBack();
     }
@@ -93,10 +109,10 @@ const NoteDetail = ({ route, navigation }) => {
           value={notesData.title}
           onChangeText={(e) => setNotesData({ ...notesData, title: e })}
           style={styles.input}
-          cursorColor="orangered"
+          cursorColor={colors.secondary}
           textAlign="left"
           placeholder="Title"
-          placeholderTextColor={"lavender"}
+          placeholderTextColor={"rgba(0,0,0,0.5)"}
         />
       </View>
       <TextInput
@@ -104,33 +120,36 @@ const NoteDetail = ({ route, navigation }) => {
         onChangeText={(e) => setNotesData({ ...notesData, body: e })}
         multiline
         numberOfLines={20}
-        cursorColor="orangered"
+        cursorColor={colors.secondary}
         textAlignVertical="top"
         textAlign="left"
         style={styles.textarea}
         placeholder="Notes"
-        placeholderTextColor={"lavender"}
+        placeholderTextColor={"rgba(0,0,0,0.5)"}
       />
       <View style={styles.toolsWrapper}>
         <Pressable
           style={styles.toolBtn}
           android_ripple={{ color: "rgba(255,255,255,0.5)" }}
+          onPress={pickImage}
         >
-          <Ionicons name="camera-outline" color={"#000"} size={26} />
+          <Ionicons name="camera-outline" color={colors.white} size={26} />
         </Pressable>
         <Pressable
           style={styles.toolBtn}
           android_ripple={{ color: "rgba(255,255,255,0.5)" }}
         >
-          <Ionicons name="alarm-outline" color={"#000"} size={26} />
-        </Pressable>
-        <Pressable
-          style={styles.toolBtn}
-          android_ripple={{ color: "rgba(255,255,255,0.5)" }}
-        >
-          <Ionicons name="map-outline" color={"#000"} size={26} />
+          <Ionicons name="alarm-outline" color={colors.white} size={26} />
         </Pressable>
       </View>
+      {notesData.image != null && (
+        <View style={styles.imageWrapper}>
+          <Image
+            source={{ uri: notesData.image?.uri }}
+            style={{ width: "100%", height: 400 }}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -157,12 +176,12 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: "100%",
-    borderColor: "rgba(255, 255, 255,0.2)",
+    borderColor: "rgba(0, 0, 0,0.2)",
     borderWidth: 1,
-    backgroundColor: "#21212b",
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 10,
-    color: "lavender",
+    color: colors.black,
   },
   bodyWrapper: {
     width: "100%",
@@ -174,22 +193,12 @@ const styles = StyleSheet.create({
   textarea: {
     marginVertical: 10,
     width: "100%",
-    borderColor: "rgba(255, 255, 255,0.2)",
+    borderColor: "rgba(0, 0, 0,0.2)",
     borderWidth: 1,
-    backgroundColor: "#21212b",
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 10,
-    color: "lavender",
-  },
-  submitBtn: {
-    width: "100%",
-    height: 50,
-    borderRadius: 10,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "orangered",
-    marginVertical: 10,
+    color: colors.black,
   },
   toolsWrapper: {
     width: "100%",
@@ -201,12 +210,17 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   toolBtn: {
-    width: "30%",
-    backgroundColor: "lavender",
+    width: "48%",
+    backgroundColor: colors.secondary,
     height: "100%",
     borderRadius: 10,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  imageWrapper: {
+    width: "100%",
+    marginVertical: 10,
+    marginBottom: 30,
   },
 });

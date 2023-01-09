@@ -12,49 +12,8 @@ import NotesCard from "../../components/NotesCard";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../context/context";
+import colors from "../../constants/colors";
 
-const notes = [
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-  {
-    title: "Do my assignment",
-    body: "",
-  },
-];
 
 const Notes = ({ navigation }) => {
   const { allNotes, getAllNotes } = useContext(GlobalContext);
@@ -72,22 +31,30 @@ const Notes = ({ navigation }) => {
 
   return (
     <View style={[globalStyles.container, styles.container]}>
-      <FlatList
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-        data={allNotes}
-        renderItem={({ item }) => (
-          <NotesCard note={item} navigation={navigation} />
-        )}
-      />
+      {!allNotes || !allNotes.length ? (
+        <View style={styles.emptyContainer}>
+          <Text>No notes available!</Text>
+        </View>
+      ) : (
+        <FlatList
+          bouncesZoom
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+          data={allNotes}
+          renderItem={({ item }) => (
+            <NotesCard note={item} navigation={navigation} />
+          )}
+        />
+      )}
+
       <Pressable
         style={styles.floatingbtn}
         onPress={() => navigation.navigate("AddNote")}
       >
         <Ionicons
           name="add-outline"
-          color={"orangered"}
+          color={colors.white}
           size={25}
           style={{ fontWeight: "bold" }}
         />
@@ -103,7 +70,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   floatingbtn: {
-    backgroundColor: "lavender",
+    backgroundColor: colors.secondary,
     position: "absolute",
     bottom: 30,
     left: "44%",
@@ -116,4 +83,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  emptyContainer: {
+    width: "100%",
+    height: "100%",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  }
 });

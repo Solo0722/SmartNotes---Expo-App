@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import moment from "moment-timezone";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GlobalContext } from "../context/context";
+import colors from "../constants/colors";
 
 const NotesCard = ({ note, navigation }) => {
   const { deleteNote } = useContext(GlobalContext);
@@ -13,14 +14,14 @@ const NotesCard = ({ note, navigation }) => {
       "This action is irreversible",
       [
         { text: "Yes", onPress: () => deleteNote(noteId) },
-        { text: "No", onPress: () => console.log("Alert closed") },
+        { text: "No" },
       ]
     );
   };
 
   return (
     <Pressable
-      android_ripple={{ color: "#21212b" }}
+      android_ripple={{ color: "rgba(255,255,255,0.5)" }}
       style={styles.cardWrapper}
       onPress={() => navigation.navigate("NoteDetail", { note: note })}
     >
@@ -50,24 +51,23 @@ export default NotesCard;
 
 const styles = StyleSheet.create({
   cardWrapper: {
-    width: "100%",
+    width: "98%",
     height: 90,
+    marginHorizontal: 4,
     minHeight: 90,
-    backgroundColor: "#21212b",
+    backgroundColor: colors.white,
     marginVertical: 10,
+    elevation: 2,
     borderRadius: 10,
     padding: 10,
-    borderColor: "lavender",
-    borderWidth: 1,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   primaryText: {
-    color: "lavender",
     fontWeight: "bold",
   },
   secondaryText: {
-    color: "rgba(255, 255, 255, 0.4)",
+    color: "rgba(0,0,0,0.5)",
   },
 });

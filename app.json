@@ -6,10 +6,18 @@
     "orientation": "portrait",
     "icon": "./assets/android/mipmap-hdpi/ic_launcher.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
     "splash": {
-      "image": "./assets/android/mipmap-hdpi/ic_launcher.png",
+      "image": "./assets/splash-screen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#181820"
+      "backgroundColor": "#fff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,12 +28,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/android/mipmap-hdpi/ic_launcher.png",
-        "backgroundColor": "#181820"
+        "foregroundImage": "./assets/android/mipmap-mdpi/ic_launcher.png",
+        "backgroundColor": "#fff"
       }
     },
     "web": {
-      "favicon": "./assets/android/mipmap-hdpi/ic_launcher.png"
+      "favicon": "./assets/android/mipmap-mdpi/ic_launcher.png"
     }
   }
 }
